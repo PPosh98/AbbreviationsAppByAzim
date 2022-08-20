@@ -1,6 +1,7 @@
 package com.example.abbreviationsappbyazim.di
 
 import com.example.abbreviationsappbyazim.api.APIReference.BASE_URL
+import com.example.abbreviationsappbyazim.api.FetchAPI
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -41,4 +42,9 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
+
+    @Provides
+    fun provideApiDetails(retrofit: Retrofit): FetchAPI {
+        return retrofit.create(FetchAPI::class.java)
+    }
 }
