@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface AbbreviationsDAO {
 
     @Query("SELECT * FROM abbreviations ORDER BY generatedId ASC")
-    fun readAbbreviationsFromDb() : Flow<List<AbbreviationsEntity>>
+    fun readAbbreviationsFromDb(shortForm: String) : Flow<List<AbbreviationsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAbbreviationInsideDb(abbreviationsEntity: AbbreviationsEntity)
+    fun insertAbbreviationToDb(abbreviationsEntity: AbbreviationsEntity)
 }
