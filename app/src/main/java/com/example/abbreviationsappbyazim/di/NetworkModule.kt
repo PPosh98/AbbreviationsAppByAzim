@@ -1,5 +1,6 @@
 package com.example.abbreviationsappbyazim.di
 
+import com.example.abbreviationsappbyazim.api.APIReference.BASE_URL
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -36,7 +37,7 @@ class NetworkModule {
     @Provides
     fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient) =
         Retrofit.Builder()
-            .baseUrl("http://www.nactem.ac.uk/software/acromine/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
