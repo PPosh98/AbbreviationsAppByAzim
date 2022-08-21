@@ -8,7 +8,7 @@ import retrofit2.Response
 interface Repository {
     suspend fun getAbbreviationsFromAPI(shortForm: String) : Response<Abbreviations>
 
-    suspend fun getAbbreviationsFromDB(shortForm: String) : Flow<List<AbbreviationsEntity>>
+    fun getAbbreviationsFromDB(shortForm: String) : Flow<List<AbbreviationsEntity>>
 
     suspend fun addAbbreviationsToDB(abbreviationsEntity: AbbreviationsEntity)
 

@@ -12,7 +12,7 @@ class RepositoryImpl @Inject constructor(private val fetchAPI: FetchAPI, private
     override suspend fun getAbbreviationsFromAPI(shortForm: String): Response<Abbreviations> =
         fetchAPI.getAbbreviations(shortForm)
 
-    override suspend fun getAbbreviationsFromDB(shortForm: String): Flow<List<AbbreviationsEntity>> =
+    override fun getAbbreviationsFromDB(shortForm: String): Flow<List<AbbreviationsEntity>> =
         abbreviationsDAO.readAbbreviationsFromDb(shortForm)
 
     override suspend fun addAbbreviationsToDB(abbreviationsEntity: AbbreviationsEntity) =

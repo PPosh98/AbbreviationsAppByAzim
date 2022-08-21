@@ -8,6 +8,6 @@ import com.example.abbreviationsappbyazim.models.Abbreviations
 class AbbreviationsEntity(val abbreviationsModel: Abbreviations) {
     @PrimaryKey(autoGenerate = true)
     var generatedId: Int = 0
-
+    var shortForm: String = ""
 
 }
