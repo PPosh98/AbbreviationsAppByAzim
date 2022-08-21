@@ -21,8 +21,6 @@ class AbbreviationsViewModel @Inject constructor(private val repository: Reposit
     private var _abbreviationsLiveData: MutableLiveData<UiState> = MutableLiveData(UiState.Loading)
     val abbreviationsLiveData: LiveData<UiState> get() = _abbreviationsLiveData
 
-//    val readAbbreviations: LiveData<List<AbbreviationsEntity>> = repository.getAbbreviationsFromDB() .asLiveData()
-
     lateinit var readAbbreviations: LiveData<List<AbbreviationsEntity>>
 
     fun readAbbreviations(shortForm: String) {
@@ -33,11 +31,10 @@ class AbbreviationsViewModel @Inject constructor(private val repository: Reposit
 
         CoroutineScope(Dispatchers.IO).launch {
             val response = repository.getAbbreviationsFromAPI(shortForm)
-            Log.i("Data", response.body().toString())
             if(response.isSuccessful){
                 _abbreviationsLiveData.postValue(
                     response.body()?.let {
-                        addDataToDatabase(it)
+                        if (response.body()!!.size > 0) addDataToDatabase(it)
                         UiState.Success(
                             response.body() as Abbreviations
                         )

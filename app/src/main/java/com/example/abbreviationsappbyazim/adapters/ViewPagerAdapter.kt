@@ -27,4 +27,5 @@ class ViewPagerAdapter(private val abbreviationsList: Abbreviations) : RecyclerV
     }
 
     override fun getItemCount() = abbreviationsList[0].lfs.size
+
 }

@@ -3,6 +3,8 @@ package com.example.abbreviationsappbyazim.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.abbreviationsappbyazim.R
@@ -13,11 +15,13 @@ import com.example.abbreviationsappbyazim.util.UiState
 import com.example.abbreviationsappbyazim.util.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -32,29 +36,26 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        lifecycleScope.launchWhenStarted {
-            networkListener = NetworkListener()
-            networkListener.checkNetworkAvailability(applicationContext)
-                .collect { status ->
-                    Log.i("NetworkListener", status.toString())
-                    readDatabase()
-                }
-        }
+        val searchView = binding.searchView
+        searchView.setOnQueryTextListener(this@MainActivity)
 
         setContentView(binding.root)
 
     }
 
-    private fun readDatabase() {
+    private fun readDatabase(query: String?) {
         lifecycleScope.launch {
-            viewModel.readAbbreviations("SOS")
+            if (query != null) {
+                viewModel.readAbbreviations(query)
+            }
             viewModel.readAbbreviations.observeOnce(this@MainActivity) { database ->
                 if (database.isNotEmpty()) {
                     Log.i("data", "readDatabase called!")
-                    Log.i("data", database[0].abbreviationsModel.toString())
-//                    updateUI(database[0].abbreviationsModel)
+                    binding.viewPager.adapter = ViewPagerAdapter(database[0].abbreviationsModel)
                 } else {
-                    viewModel.getAbbreviations("SOS")
+                    if (query != null) {
+                        viewModel.getAbbreviations(query)
+                    }
                     Log.i("data", "API called!")
                     viewModel.abbreviationsLiveData.observe(this@MainActivity) { state ->
                         when(state) {
@@ -62,8 +63,11 @@ class MainActivity : AppCompatActivity() {
                                 Log.i("API Response: ", "LOADING")
                             }
                             is UiState.Success -> {
-                                Log.i("data", "API called success!")
-                                binding.viewPager.adapter = ViewPagerAdapter(state.abbrevResponse)
+                                if (state.abbrevResponse.size > 0) {
+                                    binding.viewPager.adapter = ViewPagerAdapter(state.abbrevResponse)
+                                } else {
+                                    Toast.makeText(this@MainActivity, "Sorry, results for '$query' not found", Toast.LENGTH_SHORT).show()
+                                }
                             }
                             is UiState.Error -> {
                                 Log.i("API Response: ", "Error -> ${state.error}")
@@ -73,5 +77,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        lifecycleScope.launchWhenStarted {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvailability(applicationContext)
+                .collect { status ->
+                    Log.i("NetworkListener", status.toString())
+                    viewModel.abbreviationsLiveData.removeObservers(this@MainActivity)
+                    readDatabase(query)
+                }
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return false
     }
 }

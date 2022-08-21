@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AbbreviationsDAO {
 
-    @Query("SELECT * FROM abbreviations WHERE shortForm = :shortForm ORDER BY generatedId ASC")
+    @Query("SELECT * FROM abbreviations WHERE sf LIKE :shortForm")
     fun readAbbreviationsFromDb(shortForm: String) : Flow<List<AbbreviationsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
