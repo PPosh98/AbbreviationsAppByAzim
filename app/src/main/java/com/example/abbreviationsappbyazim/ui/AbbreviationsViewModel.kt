@@ -39,7 +39,7 @@ class AbbreviationsViewModel @Inject constructor(private val repository: Reposit
                     response.body()?.let {
                         addDataToDatabase(it)
                         UiState.Success(
-                            Abbreviations()
+                            response.body() as Abbreviations
                         )
                     }
                 )

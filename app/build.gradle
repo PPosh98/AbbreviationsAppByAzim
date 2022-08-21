@@ -46,11 +46,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
-    //Okhttp
+    // Okhttp
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3"
 
     // Dependency Injection
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
     implementation 'com.google.dagger:hilt-android:2.42'
     kapt 'com.google.dagger:hilt-android-compiler:2.42'
 
@@ -59,30 +60,34 @@ dependencies {
     kapt "androidx.room:room-compiler:2.4.3"
     implementation "androidx.room:room-ktx:2.4.3"
 
-    // viewmodel Hilt
-    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
-
-    //Coroutine
+    // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
 
-    //coil
-    implementation("io.coil-kt:coil:2.1.0")
+    // Coil
+    implementation "io.coil-kt:coil:2.1.0"
 
-    //swipe refresh layout
+    // Swipe refresh layout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    // ViewPager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     kapt 'com.github.bumptech.glide:compiler:4.13.2'
 
-    //Circular Imageview
+    // RecyclerView
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+
+    // Circular Imageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    //Navigation
+    // Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
 
+    // Others
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'

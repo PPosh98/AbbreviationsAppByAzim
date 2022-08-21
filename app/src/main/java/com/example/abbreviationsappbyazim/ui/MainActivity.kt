@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.abbreviationsappbyazim.R
+import com.example.abbreviationsappbyazim.adapters.ViewPagerAdapter
+import com.example.abbreviationsappbyazim.databinding.ActivityMainBinding
 import com.example.abbreviationsappbyazim.util.NetworkListener
 import com.example.abbreviationsappbyazim.util.UiState
 import com.example.abbreviationsappbyazim.util.observeOnce
@@ -17,6 +19,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     private val viewModel : AbbreviationsViewModel by lazy {
         ViewModelProvider(this)[AbbreviationsViewModel::class.java]
     }
@@ -25,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
         lifecycleScope.launchWhenStarted {
             networkListener = NetworkListener()
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
     }
 
@@ -57,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             is UiState.Success -> {
                                 Log.i("data", "API called success!")
-//                                binding.recyclerViewPeople.adapter = PeopleAdapter(requireContext(), state.peopleResponse)
+                                binding.viewPager.adapter = ViewPagerAdapter(state.abbrevResponse)
                             }
                             is UiState.Error -> {
                                 Log.i("API Response: ", "Error -> ${state.error}")
